@@ -14,11 +14,23 @@ public abstract class AnimalChessPieces : MonoBehaviour
     public List<GameObject> ShowPossibleMovePos;
     public GameObject GameObjectSelectedCheck;
 
+    public Material player_1_Mat;
+    public Material player_2_Mat;
+
     public void Start()
     {
         SetMyPossibleMove();
         DeactivePossibleMovePosition();
         GameObjectSelectedCheck.SetActive(false);
+
+        if(isMyPieces)
+        {
+            GetComponent<MeshRenderer>().material = player_1_Mat;
+        }
+        else
+        {
+            GetComponent<MeshRenderer>().material = player_2_Mat;
+        }
     }
 
     public virtual void MovePieces(int tableIndexNumber)
@@ -47,7 +59,8 @@ public abstract class AnimalChessPieces : MonoBehaviour
 
     public virtual void ShowPossibleMovePosition()
     {
-        for(int index = 0; index < CanMoveTableIndexNumber.Count; index++)
+        SetMyPossibleMove();
+        for (int index = 0; index < CanMoveTableIndexNumber.Count; index++)
         {
             if (CanMoveTableIndexNumber[index] != -1)
             {
@@ -72,9 +85,10 @@ public abstract class AnimalChessPieces : MonoBehaviour
 
     }
 
-    public void CatchPieces(int tableIndexNumber)
+    public void CatchPieces(AnimalChessPieces enemyPiece)
     {
-
+        Destroy(enemyPiece.gameObject);
+        MovePieces(enemyPiece.nowMyTableIndex);
     }
 
     private void SpawnPieces()
@@ -87,6 +101,7 @@ public abstract class AnimalChessPieces : MonoBehaviour
         CanMoveTableIndexNumber.Clear();
         foreach (var checkBox in CanMoveTableCheckBox)
         {
+            checkBox.CheckCanMovePosition();
             CanMoveTableIndexNumber.Add(checkBox.checkFrameNumber);
         }
     }

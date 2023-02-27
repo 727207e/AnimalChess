@@ -457,15 +457,15 @@ PrefabInstance:
     - target: {fileID: 6599231602677680358, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: DaeObjectPref
       value: 
-      objectReference: {fileID: 1265541570139933349, guid: 56fdc5eb4a709f44d97d186748bb5853, type: 3}
+      objectReference: {fileID: 1265541570139933349, guid: 146d3e89d7cbdad4cb5b5b18d057f065, type: 3}
     - target: {fileID: 6599231602677680358, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: JigObjectPref
       value: 
-      objectReference: {fileID: 1265541570139933349, guid: 56fdc5eb4a709f44d97d186748bb5853, type: 3}
+      objectReference: {fileID: 1265541570139933349, guid: 44b4072c321accb4abd5d5c2bedb2022, type: 3}
     - target: {fileID: 6599231602677680358, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: jolObjectPref
       value: 
-      objectReference: {fileID: 1265541570139933349, guid: 56fdc5eb4a709f44d97d186748bb5853, type: 3}
+      objectReference: {fileID: 1265541570139933349, guid: b5445c6a7e1460b4d9f8f103d2dc5d8d, type: 3}
     - target: {fileID: 6599231602677680358, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: kingObjectPref
       value: 
