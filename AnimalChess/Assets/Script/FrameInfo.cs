@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class FrameInfo : MonoBehaviour
 {
-    public AnimalChessPieces OnThisFramePiecesInfo;
-
-    public bool IsFrameGotPieces()
-    {
-        if (OnThisFramePiecesInfo != null)
-        {
-            return true;
-        }
-
-        else
-        {
-            return false;
-        }
-    }
+    public int tableIndexNumber;
+    public bool isMyFrame;
 }
