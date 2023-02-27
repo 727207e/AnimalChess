@@ -109,7 +109,7 @@ public class ChessMoveCheck : MonoBehaviour
                 //적군을 선택한 경우
                 else if(clickedObj.isMyPieces == false)
                 {
-                    preClickedObject.CatchPieces(clickedObj.nowMyTableIndex);
+                    preClickedObject.CatchPieces(clickedObj);
                 }
             }
         }
