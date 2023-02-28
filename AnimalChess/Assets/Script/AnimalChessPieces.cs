@@ -34,7 +34,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun
         }
 
         transform.name = ObjectName;
-        transform.SetParent(ChessTable.instance.TableFrame[IndexNumber].transform);
+        transform.SetParent(GameManager.instance.ChessTable.TableFrame[IndexNumber].transform);
         transform.localScale = Vector3.one;
         transform.localPosition = Vector3.zero;
         transform.Translate(0, 0.1f, 0);
@@ -69,6 +69,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun
             }
         }
         photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
+        GameManager.instance.MyTurnOver();
 
         //내 턴이 되면 다시 측정하는 걸로 수정할것
         SetMyPossibleMove();
@@ -78,7 +79,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun
     public void MovePiecesOnSync(int tableIndexNumber)
     {
         //해당 칸으로 이동
-        transform.SetParent(ChessTable.instance.TableFrame[tableIndexNumber].transform);
+        transform.SetParent(GameManager.instance.ChessTable.TableFrame[tableIndexNumber].transform);
         transform.localPosition = Vector3.zero;
         transform.Translate(0, 0.1f, 0);
 

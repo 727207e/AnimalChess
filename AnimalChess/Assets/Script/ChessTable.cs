@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class ChessTable : MonoBehaviourPun
 {
-    public static ChessTable instance;
-
     //9  10 11
     //6  7  8
     //3  4  5
@@ -20,14 +18,6 @@ public class ChessTable : MonoBehaviourPun
     public string JigObjectPref;
 
     public bool isFirstUser = true;
-
-    public Action actionIsMyTurn;
-    public Action actionIsEnemyTurn;
-
-    public void Awake()
-    {
-        instance = this;
-    }
 
     public void Start()
     {
@@ -42,8 +32,7 @@ public class ChessTable : MonoBehaviourPun
         SpawnObject(kingObjectPref, 10, false, "player_2_King", false);
         SpawnObject(JigObjectPref, 9, false, "player_2_Jig", false);
         SpawnObject(jolObjectPref, 7, false, "player_2_jol", false);
-
-
+        
         //내 진영 체크
         if (isFirstUser)
         {
