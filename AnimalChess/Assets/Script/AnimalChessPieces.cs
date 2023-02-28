@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using UnityEditor;
+using System.Threading.Tasks;
 
-
-public abstract class AnimalChessPieces : MonoBehaviour
+public abstract class AnimalChessPieces : MonoBehaviourPun
 {
     public bool isCapturedObject = false;
     public bool isMyPieces;
@@ -17,13 +19,33 @@ public abstract class AnimalChessPieces : MonoBehaviour
     public Material player_1_Mat;
     public Material player_2_Mat;
 
-    public void Start()
+
+    public void InitChessPieces(int IndexNumber, string ObjectName, bool isMyPieces)
     {
+        photonView.RPC("PhotonThisPiecesSetting", RpcTarget.All, IndexNumber, ObjectName, isMyPieces);
+    }
+
+    [PunRPC]
+    public void PhotonThisPiecesSetting(int IndexNumber, string ObjectName, bool isMyPieces)
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            isMyPieces = !isMyPieces;
+        }
+
+        transform.name = ObjectName;
+        transform.SetParent(ChessTable.instance.TableFrame[IndexNumber].transform);
+        transform.localScale = Vector3.one;
+        transform.localPosition = Vector3.zero;
+        transform.Translate(0, 0.1f, 0);
+        transform.GetComponent<AnimalChessPieces>().isMyPieces = isMyPieces;
+        transform.GetComponent<AnimalChessPieces>().nowMyTableIndex = IndexNumber;
+
         SetMyPossibleMove();
         DeactivePossibleMovePosition();
         GameObjectSelectedCheck.SetActive(false);
 
-        if(isMyPieces)
+        if (isMyPieces)
         {
             GetComponent<MeshRenderer>().material = player_1_Mat;
         }
@@ -46,15 +68,21 @@ public abstract class AnimalChessPieces : MonoBehaviour
                 return;
             }
         }
+        photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
+
+        //내 턴이 되면 다시 측정하는 걸로 수정할것
+        SetMyPossibleMove();
+    }
+
+    [PunRPC]
+    public void MovePiecesOnSync(int tableIndexNumber)
+    {
         //해당 칸으로 이동
         transform.SetParent(ChessTable.instance.TableFrame[tableIndexNumber].transform);
         transform.localPosition = Vector3.zero;
         transform.Translate(0, 0.1f, 0);
 
         nowMyTableIndex = tableIndexNumber;
-
-        //내 턴이 되면 다시 측정하는 걸로 수정할것
-        SetMyPossibleMove();
     }
 
     public virtual void ShowPossibleMovePosition()
