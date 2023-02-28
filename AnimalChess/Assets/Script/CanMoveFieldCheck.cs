@@ -6,7 +6,6 @@ using System;
 public class CanMoveFieldCheck : MonoBehaviour
 {
     public int checkFrameNumber = -1;
-    bool isTrigger = false;
 
     public void CheckCanMovePosition()
     {
@@ -32,25 +31,6 @@ public class CanMoveFieldCheck : MonoBehaviour
         if(clickableCollider != null)
         {
             checkFrameNumber = clickableCollider.GetComponent<FrameInfo>().tableIndexNumber;
-        }
-    }
-
-
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    Debug.Log(other.tag);
-    //    if (other.gameObject.transform.tag == "tile")
-    //    {
-    //        isTrigger = true;
-    //        checkFrameNumber = other.gameObject.GetComponent<FrameInfo>().tableIndexNumber;
-    //    }
-    //}
-
-    private void Update()
-    {
-        if(!isTrigger)
-        {
-            checkFrameNumber = -1;
         }
     }
 }
