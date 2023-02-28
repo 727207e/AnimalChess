@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 1265541570139933351}
   - component: {fileID: 1265541570139933350}
   - component: {fileID: 3267584864782420492}
+  - component: {fileID: -6383062351822246500}
   m_Layer: 6
   m_Name: ChessPieces_Jig
   m_TagString: pieces
@@ -385,6 +386,28 @@ MonoBehaviour:
   GameObjectSelectedCheck: {fileID: 7437481489916546542}
   player_1_Mat: {fileID: 2100000, guid: 9c569caf0cdbdae47a254fa6cab8d0c0, type: 2}
   player_2_Mat: {fileID: 2100000, guid: 67d981841e529a546b38ab4fc3c1f3b3, type: 2}
+--- !u!114 &-6383062351822246500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1265541570139933349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1646644224270058237
 GameObject:
   m_ObjectHideFlags: 0

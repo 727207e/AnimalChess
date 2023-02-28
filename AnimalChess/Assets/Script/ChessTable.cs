@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChessTable : MonoBehaviour
+public class ChessTable : MonoBehaviourPun
 {
     public static ChessTable instance;
 
@@ -12,10 +13,10 @@ public class ChessTable : MonoBehaviour
     //0  1  2
     public List<FrameInfo> TableFrame;
 
-    public GameObject jolObjectPref;
-    public GameObject kingObjectPref;
-    public GameObject DaeObjectPref;
-    public GameObject JigObjectPref;
+    public string jolObjectPref;
+    public string kingObjectPref;
+    public string DaeObjectPref;
+    public string JigObjectPref;
 
     public bool isFirstUser = true;
 
@@ -51,22 +52,22 @@ public class ChessTable : MonoBehaviour
         }
     }
 
-    private GameObject SpawnObject(GameObject prefabObject,
+    private GameObject SpawnObject(string prefabObjectString,
         int IndexNumber, bool isRotate, string ObjectName, bool isMyPieces)
     {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return null;
+        }
+
         float rotateValue = 0;
         if (!isRotate)
             rotateValue = 180.0f;
 
-        GameObject playerObject = Instantiate(prefabObject,
+        GameObject playerObject = PhotonNetwork.Instantiate(prefabObjectString,
             TableFrame[IndexNumber].transform.position,
             Quaternion.Euler(0, rotateValue, 0));
-        playerObject.name = ObjectName;
-        playerObject.transform.SetParent(TableFrame[IndexNumber].transform);
-        playerObject.transform.localScale = Vector3.one;
-        playerObject.transform.Translate(0, 0.1f, 0);
-        playerObject.GetComponent<AnimalChessPieces>().isMyPieces = isMyPieces;
-        playerObject.GetComponent<AnimalChessPieces>().nowMyTableIndex = IndexNumber;
+        playerObject.GetComponent<AnimalChessPieces>().InitChessPieces(IndexNumber, ObjectName, isMyPieces);
 
         return playerObject;
     }
