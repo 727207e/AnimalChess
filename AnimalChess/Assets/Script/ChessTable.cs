@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,9 @@ public class ChessTable : MonoBehaviourPun
     public string JigObjectPref;
 
     public bool isFirstUser = true;
+
+    public Action actionIsMyTurn;
+    public Action actionIsEnemyTurn;
 
     public void Awake()
     {

@@ -22,21 +22,22 @@ public abstract class AnimalChessPieces : MonoBehaviourPun
 
     public void InitChessPieces(int IndexNumber, string ObjectName, bool isMyPieces)
     {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            isMyPieces = !isMyPieces;
-        }
-
         photonView.RPC("PhotonThisPiecesSetting", RpcTarget.All, IndexNumber, ObjectName, isMyPieces);
     }
 
     [PunRPC]
     public void PhotonThisPiecesSetting(int IndexNumber, string ObjectName, bool isMyPieces)
     {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            isMyPieces = !isMyPieces;
+        }
+
         transform.name = ObjectName;
-        transform.transform.SetParent(ChessTable.instance.TableFrame[IndexNumber].transform);
-        transform.transform.localScale = Vector3.one;
-        transform.transform.Translate(0, 0.1f, 0);
+        transform.SetParent(ChessTable.instance.TableFrame[IndexNumber].transform);
+        transform.localScale = Vector3.one;
+        transform.localPosition = Vector3.zero;
+        transform.Translate(0, 0.1f, 0);
         transform.GetComponent<AnimalChessPieces>().isMyPieces = isMyPieces;
         transform.GetComponent<AnimalChessPieces>().nowMyTableIndex = IndexNumber;
 
