@@ -16,9 +16,6 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
     public List<GameObject> ShowPossibleMovePos;
     public GameObject GameObjectSelectedCheck;
 
-    public Material player_1_Mat;
-    public Material player_2_Mat;
-
     class SpawnObjectDataType
     {
         public int _indexNumber;
@@ -68,12 +65,14 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
         if (isMyPieces)
         {
-            GetComponent<MeshRenderer>().material = player_1_Mat;
+            GetComponent<MeshRenderer>().material = GameManager.instance.player_1_Mat;
         }
         else
         {
-            GetComponent<MeshRenderer>().material = player_2_Mat;
+            GetComponent<MeshRenderer>().material = GameManager.instance.player_2_Mat;
         }
+
+        GameManager.instance.actionIsEnemyTurn += DeactivePossibleMovePosition;
     }
 
     public virtual bool MovePieces(int tableIndexNumber)
@@ -125,10 +124,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
     {
         for (int index = 0; index < CanMoveTableIndexNumber.Count; index++)
         {
-            if (CanMoveTableIndexNumber[index] != -1)
-            {
-                ShowPossibleMovePos[index].SetActive(false);
-            }
+            ShowPossibleMovePos[index].SetActive(false);
         }
     }
 
@@ -145,9 +141,10 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         }
     }
 
-    private void SpawnPieces()
+    public void SpawnPieces(int tableIndexNumber)
     {
-
+        photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
+        GameManager.instance.MyTurnOver();
     }
 
     protected void SetMyPossibleMove()
@@ -159,5 +156,4 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
             CanMoveTableIndexNumber.Add(checkBox.checkFrameNumber);
         }
     }
-
 }

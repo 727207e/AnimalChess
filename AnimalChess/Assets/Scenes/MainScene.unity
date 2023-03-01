@@ -311,6 +311,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1369022582, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
+      propertyPath: player_1_Mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 9c569caf0cdbdae47a254fa6cab8d0c0, type: 2}
+    - target: {fileID: 1369022582, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
+      propertyPath: player_2_Mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 67d981841e529a546b38ab4fc3c1f3b3, type: 2}
+    - target: {fileID: 1369022582, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: CatchPiecesData
       value: 
       objectReference: {fileID: 6599231602531883841}
@@ -365,6 +373,10 @@ PrefabInstance:
     - target: {fileID: 6599231602531883841, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: sceneViewId
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899472377549085747, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
+      propertyPath: pieceOffset
+      value: 2.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}

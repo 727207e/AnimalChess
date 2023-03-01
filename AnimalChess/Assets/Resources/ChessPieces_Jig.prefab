@@ -466,8 +466,6 @@ MonoBehaviour:
   - {fileID: 6383077365004132377}
   - {fileID: 1984349828401416235}
   GameObjectSelectedCheck: {fileID: 7437481489916546542}
-  player_1_Mat: {fileID: 2100000, guid: 9c569caf0cdbdae47a254fa6cab8d0c0, type: 2}
-  player_2_Mat: {fileID: 2100000, guid: 67d981841e529a546b38ab4fc3c1f3b3, type: 2}
 --- !u!114 &-6383062351822246500
 MonoBehaviour:
   m_ObjectHideFlags: 0

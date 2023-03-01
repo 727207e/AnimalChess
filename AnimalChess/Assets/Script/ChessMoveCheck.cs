@@ -28,6 +28,11 @@ public class ChessMoveCheck : MonoBehaviour
 
     Ray ray;
 
+    public void Start()
+    {
+        GameManager.instance.actionIsEnemyTurn += (() => preClickedObject = null);
+    }
+
     public void Update()
     {
         if(!GameManager.instance.IsMyTurn)
@@ -143,7 +148,7 @@ public class ChessMoveCheck : MonoBehaviour
                     //내 땅인 경우 생성
                     if (GameManager.instance.ChessTable.TableFrame[tableIndexNumber].isMyFrame)
                     {
-                        SpawnNewPieces(tableIndexNumber);
+                        preClickedObject.SpawnPieces(tableIndexNumber);
                     }
                 }
                 else
@@ -152,10 +157,5 @@ public class ChessMoveCheck : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void SpawnNewPieces(int tableIndexNumber)
-    {
-        preClickedObject.MovePieces(tableIndexNumber);
     }
 }

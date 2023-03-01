@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviourPun
 
     public int MyPlayNumber;        //1번이 마스터, 2번은 게스트
 
+    public Material player_1_Mat;
+    public Material player_2_Mat;
+
     private bool isMyTurn = false;
     public bool IsMyTurn
     {

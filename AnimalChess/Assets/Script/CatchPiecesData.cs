@@ -14,16 +14,26 @@ public class CatchPiecesData : MonoBehaviourPun
     [SerializeField] GameObject User_1_Pocket;
     [SerializeField] GameObject User_2_Pocket;
 
-    public float pieceOffset = 2.5f;
+    float pieceOffset = 2.3f;
+
+    Material myColor;
+    Material enemyColor;
 
     public void Start()
     {
         User_1_CatchPiecesList = new List<AnimalChessPieces>();
         User_2_CatchPiecesList = new List<AnimalChessPieces>();
 
-        PiecesDic = new Dictionary<int, List<AnimalChessPieces>>()
-            {{ 1, User_1_CatchPiecesList }, {2, User_2_CatchPiecesList }};
+        PiecesDic = new Dictionary<int, List<AnimalChessPieces>>(){{ 1, User_1_CatchPiecesList }, {2, User_2_CatchPiecesList }};
+        
+        myColor = GameManager.instance.player_1_Mat;
+        enemyColor = GameManager.instance.player_2_Mat;
 
+        if(GameManager.instance.MyPlayNumber == 2)
+        {
+            myColor = enemyColor;
+            enemyColor = GameManager.instance.player_1_Mat;
+        }
     }
 
     public void AddUserCatch(int ListNumber, AnimalChessPieces animalChessPieces)
@@ -63,14 +73,16 @@ public class CatchPiecesData : MonoBehaviourPun
         {
             User_1_CatchPiecesList[index].transform.SetParent(User_1_Pocket.transform);
             User_1_CatchPiecesList[index].transform.localPosition = Vector3.zero;
-            User_1_CatchPiecesList[index].transform.Translate(0, 0, pieceOffset * index);
+            User_1_CatchPiecesList[index].transform.Translate(0, 0, -1 * pieceOffset * index);
+            User_1_CatchPiecesList[index].gameObject.GetComponent<MeshRenderer>().material = myColor;
         }
 
         for (int index = 0; index < User_2_CatchPiecesList.Count; index++)
         {
             User_2_CatchPiecesList[index].transform.SetParent(User_2_Pocket.transform);
             User_2_CatchPiecesList[index].transform.localPosition = Vector3.zero;
-            User_2_CatchPiecesList[index].transform.Translate(0, 0, -1 * pieceOffset * index);
+            User_2_CatchPiecesList[index].transform.Translate(0, 0, pieceOffset * index);
+            User_2_CatchPiecesList[index].gameObject.GetComponent<MeshRenderer>().material = enemyColor;
         }
     }
 }

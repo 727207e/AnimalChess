@@ -249,8 +249,6 @@ MonoBehaviour:
   ShowPossibleMovePos:
   - {fileID: 5621184495584738612}
   GameObjectSelectedCheck: {fileID: 7437481489916546542}
-  player_1_Mat: {fileID: 2100000, guid: 9c569caf0cdbdae47a254fa6cab8d0c0, type: 2}
-  player_2_Mat: {fileID: 2100000, guid: 67d981841e529a546b38ab4fc3c1f3b3, type: 2}
 --- !u!114 &3944010345488565586
 MonoBehaviour:
   m_ObjectHideFlags: 0

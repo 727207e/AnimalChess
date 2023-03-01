@@ -17,8 +17,6 @@ public class ChessTable : MonoBehaviourPun
     public string DaeObjectPref;
     public string JigObjectPref;
 
-    public bool isFirstUser = true;
-
     public void Start()
     {
         //2번 플레이어면 판을 뒤집음.
@@ -44,12 +42,12 @@ public class ChessTable : MonoBehaviourPun
         }
 
         //내 진영 체크
-        if (isFirstUser)
+        if (GameManager.instance.MyPlayNumber == 1)
         {
             CheckMyGround(new int[] { 0, 1, 2, 3, 4, 5 });
         }
 
-        else if (!isFirstUser)
+        else if (GameManager.instance.MyPlayNumber == 2)
         {
             CheckMyGround(new int[] { 6, 7, 8, 9, 10, 11 });
         }
