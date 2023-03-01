@@ -30,6 +30,11 @@ public class ChessMoveCheck : MonoBehaviour
 
     public void Update()
     {
+        if(!GameManager.instance.IsMyTurn)
+        {
+            return;
+        }
+
         UserInputCheck();
     }
 
@@ -136,7 +141,7 @@ public class ChessMoveCheck : MonoBehaviour
                 if(preClickedObject.isCapturedObject)
                 {
                     //내 땅인 경우 생성
-                    if (ChessTable.instance.TableFrame[tableIndexNumber].isMyFrame)
+                    if (GameManager.instance.ChessTable.TableFrame[tableIndexNumber].isMyFrame)
                     {
                         SpawnNewPieces(tableIndexNumber);
                     }
