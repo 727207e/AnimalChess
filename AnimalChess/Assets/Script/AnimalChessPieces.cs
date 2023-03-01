@@ -76,7 +76,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         }
     }
 
-    public virtual void MovePieces(int tableIndexNumber)
+    public virtual bool MovePieces(int tableIndexNumber)
     {
         //포로 오브젝트가 아니면 이동 가능 확인하기
         if (!isCapturedObject)
@@ -86,7 +86,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
             if (findIndexInTable == -1)
             {
-                return;
+                return false;
             }
         }
         photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
@@ -94,6 +94,8 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
         //내 턴이 되면 다시 측정하는 걸로 수정할것
         SetMyPossibleMove();
+
+        return true;
     }
 
     [PunRPC]
@@ -137,8 +139,10 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
     public void CatchPieces(AnimalChessPieces enemyPiece)
     {
-        Destroy(enemyPiece.gameObject);
-        MovePieces(enemyPiece.nowMyTableIndex);
+        if(MovePieces(enemyPiece.nowMyTableIndex))
+        {
+            GameManager.instance.CatchPiecesData.AddUserCatch(GameManager.instance.MyPlayNumber, enemyPiece);
+        }
     }
 
     private void SpawnPieces()

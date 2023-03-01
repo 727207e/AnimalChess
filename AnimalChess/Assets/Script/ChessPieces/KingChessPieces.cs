@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class KingChessPieces : AnimalChessPieces
 {
-    public override void MovePieces(int tableIndexNumber)
+    public override bool MovePieces(int tableIndexNumber)
     {
-        base.MovePieces(tableIndexNumber);
-
+        return base.MovePieces(tableIndexNumber);
     }
     
 }
