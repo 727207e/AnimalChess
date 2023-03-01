@@ -35,7 +35,7 @@ public class ChessMoveCheck : MonoBehaviour
 
     public void Update()
     {
-        if(!GameManager.instance.IsMyTurn)
+        if(!GameManager.instance.IsMyTurn || !GameManager.instance.isGameStart)
         {
             return;
         }

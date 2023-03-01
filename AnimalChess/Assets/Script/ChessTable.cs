@@ -45,11 +45,13 @@ public class ChessTable : MonoBehaviourPun
         if (GameManager.instance.MyPlayNumber == 1)
         {
             CheckMyGround(new int[] { 0, 1, 2, 3, 4, 5 });
+            CheckEnemyBaseGround(new int[] { 9, 10, 11 });
         }
 
         else if (GameManager.instance.MyPlayNumber == 2)
         {
             CheckMyGround(new int[] { 6, 7, 8, 9, 10, 11 });
+            CheckEnemyBaseGround(new int[] { 0, 1, 2 });
         }
 
     }
@@ -73,6 +75,14 @@ public class ChessTable : MonoBehaviourPun
         foreach (int index in myRandIndexs)
         {
             TableFrame[index].isMyFrame = true;
+        }
+    }
+
+    private void CheckEnemyBaseGround(int[] enemyBaseRandIndex)
+    {
+        foreach(int index in enemyBaseRandIndex)
+        {
+            TableFrame[index].isEnemyBaseFrame = true;
         }
     }
 }

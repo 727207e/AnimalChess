@@ -101,6 +101,8 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         transform.Translate(0, 0.1f, 0);
 
         nowMyTableIndex = tableIndexNumber;
+
+        EndMove();
     }
 
     public virtual void ShowPossibleMovePosition()
@@ -122,7 +124,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         }
     }
 
-    protected void EndMove()
+    protected virtual void EndMove()
     {
 
     }

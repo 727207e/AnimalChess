@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviourPun
     public Material player_1_Mat;
     public Material player_2_Mat;
 
+    public bool isGameStart = false;
+
     private bool isMyTurn = false;
     public bool IsMyTurn
     {
@@ -24,14 +26,17 @@ public class GameManager : MonoBehaviourPun
         }
         set
         {
-            isMyTurn = value;
-            if (isMyTurn)
+            if(isGameStart) //게임중일때만 턴이 넘어옴
             {
-                actionIsMyTurn?.Invoke();
-            }
-            else
-            {
-                actionIsEnemyTurn?.Invoke();
+                isMyTurn = value;
+                if (isMyTurn)
+                {
+                    actionIsMyTurn?.Invoke();
+                }
+                else
+                {
+                    actionIsEnemyTurn?.Invoke();
+                }
             }
         }
     }
@@ -54,6 +59,10 @@ public class GameManager : MonoBehaviourPun
         {
             MyPlayNumber = 2;
         }
+
+        isGameStart = true;
+        actionIsWin += GameWinShowUp;
+        actionIsLose += GameLosdShowUp;
     }
 
     public void MyTurnOver()
@@ -65,5 +74,17 @@ public class GameManager : MonoBehaviourPun
     public void PhotonTurnOver()
     {
         IsMyTurn = !IsMyTurn;
+    }
+
+    public void GameWinShowUp()
+    {
+        Debug.Log("Win");
+        isGameStart = false;
+    }
+
+    public void GameLosdShowUp()
+    {
+        Debug.Log("losd");
+        isGameStart = false;
     }
 }

@@ -6,4 +6,5 @@ public class FrameInfo : MonoBehaviour
 {
     public int tableIndexNumber;
     public bool isMyFrame;
+    public bool isEnemyBaseFrame;
 }
