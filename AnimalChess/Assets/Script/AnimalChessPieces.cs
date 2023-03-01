@@ -42,14 +42,10 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
             isMyPieces = !isMyPieces;
         }
 
-        if(PhotonNetwork.IsMasterClient)
-        {
-            float rotateValue = 0;
-            if (!isMyPieces)
-                rotateValue = 180.0f;
-            transform.localRotation = Quaternion.Euler(0, rotateValue, 0);
-        }
-
+        float rotateValue = 0;
+        if (!isMyPieces)
+            rotateValue = 180.0f;
+        transform.localRotation = Quaternion.Euler(0, rotateValue, 0);
 
         transform.name = objectData._objectName;
         transform.SetParent(GameManager.instance.ChessTable.TableFrame[objectData._indexNumber].transform);
@@ -60,6 +56,8 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         transform.GetComponent<AnimalChessPieces>().nowMyTableIndex = objectData._indexNumber;
 
         SetMyPossibleMove();
+        GameManager.instance.actionIsMyTurn += SetMyPossibleMove;
+
         DeactivePossibleMovePosition();
         GameObjectSelectedCheck.SetActive(false);
 
@@ -91,9 +89,6 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
         GameManager.instance.MyTurnOver();
 
-        //내 턴이 되면 다시 측정하는 걸로 수정할것
-        SetMyPossibleMove();
-
         return true;
     }
 
@@ -110,7 +105,6 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
     public virtual void ShowPossibleMovePosition()
     {
-        SetMyPossibleMove();
         for (int index = 0; index < CanMoveTableIndexNumber.Count; index++)
         {
             if (CanMoveTableIndexNumber[index] != -1)
@@ -143,8 +137,15 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
     public void SpawnPieces(int tableIndexNumber)
     {
+        photonView.RPC("RemovePocketListIndex", RpcTarget.All);
         photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
         GameManager.instance.MyTurnOver();
+    }
+
+    [PunRPC]
+    public void RemovePocketListIndex()
+    {
+        GameManager.instance.CatchPiecesData.FindAndRemovePiece(this);
     }
 
     protected void SetMyPossibleMove()

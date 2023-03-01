@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -63,6 +64,7 @@ public class CatchPiecesData : MonoBehaviourPun
         animalChessPieces.nowMyTableIndex = -1;
         animalChessPieces.CanMoveTableIndexNumber.Clear();
         animalChessPieces.CanMoveTableCheckBox.Clear();
+        animalChessPieces.transform.Rotate(0, 180, 0);
 
         ShowCatchPiece();
     }
@@ -81,8 +83,24 @@ public class CatchPiecesData : MonoBehaviourPun
         {
             User_2_CatchPiecesList[index].transform.SetParent(User_2_Pocket.transform);
             User_2_CatchPiecesList[index].transform.localPosition = Vector3.zero;
-            User_2_CatchPiecesList[index].transform.Translate(0, 0, pieceOffset * index);
+            User_2_CatchPiecesList[index].transform.Translate(0, 0, pieceOffset * index); 
             User_2_CatchPiecesList[index].gameObject.GetComponent<MeshRenderer>().material = enemyColor;
+        }
+    }
+
+    public void FindAndRemovePiece(AnimalChessPieces findPiece)
+    {
+        int findIn_1List = User_1_CatchPiecesList.FindIndex((x) => x == findPiece);
+        int findIn_2List = User_2_CatchPiecesList.FindIndex((x) => x == findPiece);
+
+        if (findIn_1List != -1)
+        {
+            User_1_CatchPiecesList.RemoveAt(findIn_1List);
+        }
+
+        else if (findIn_2List != -1)
+        {
+            User_2_CatchPiecesList.RemoveAt(findIn_2List);
         }
     }
 }

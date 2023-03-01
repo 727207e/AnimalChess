@@ -54,8 +54,7 @@ public class ChessTable : MonoBehaviourPun
 
     }
 
-    private GameObject SpawnObject(string prefabObjectString,
-        int IndexNumber, string ObjectName, bool isMyPieces)
+    private GameObject SpawnObject(string prefabObjectString, int IndexNumber, string ObjectName, bool isMyPieces)
     {
         object[] data = new object[3];
         data[0] = IndexNumber;
