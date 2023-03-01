@@ -16,9 +16,6 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
     public List<GameObject> ShowPossibleMovePos;
     public GameObject GameObjectSelectedCheck;
 
-    public Material player_1_Mat;
-    public Material player_2_Mat;
-
     class SpawnObjectDataType
     {
         public int _indexNumber;
@@ -45,14 +42,10 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
             isMyPieces = !isMyPieces;
         }
 
-        if(PhotonNetwork.IsMasterClient)
-        {
-            float rotateValue = 0;
-            if (!isMyPieces)
-                rotateValue = 180.0f;
-            transform.localRotation = Quaternion.Euler(0, rotateValue, 0);
-        }
-
+        float rotateValue = 0;
+        if (!isMyPieces)
+            rotateValue = 180.0f;
+        transform.localRotation = Quaternion.Euler(0, rotateValue, 0);
 
         transform.name = objectData._objectName;
         transform.SetParent(GameManager.instance.ChessTable.TableFrame[objectData._indexNumber].transform);
@@ -63,20 +56,24 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         transform.GetComponent<AnimalChessPieces>().nowMyTableIndex = objectData._indexNumber;
 
         SetMyPossibleMove();
+        GameManager.instance.actionIsMyTurn += SetMyPossibleMove;
+
         DeactivePossibleMovePosition();
         GameObjectSelectedCheck.SetActive(false);
 
         if (isMyPieces)
         {
-            GetComponent<MeshRenderer>().material = player_1_Mat;
+            GetComponent<MeshRenderer>().material = GameManager.instance.player_1_Mat;
         }
         else
         {
-            GetComponent<MeshRenderer>().material = player_2_Mat;
+            GetComponent<MeshRenderer>().material = GameManager.instance.player_2_Mat;
         }
+
+        GameManager.instance.actionIsEnemyTurn += DeactivePossibleMovePosition;
     }
 
-    public virtual void MovePieces(int tableIndexNumber)
+    public virtual bool MovePieces(int tableIndexNumber)
     {
         //포로 오브젝트가 아니면 이동 가능 확인하기
         if (!isCapturedObject)
@@ -86,14 +83,13 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
             if (findIndexInTable == -1)
             {
-                return;
+                return false;
             }
         }
         photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
         GameManager.instance.MyTurnOver();
 
-        //내 턴이 되면 다시 측정하는 걸로 수정할것
-        SetMyPossibleMove();
+        return true;
     }
 
     [PunRPC]
@@ -109,7 +105,6 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
     public virtual void ShowPossibleMovePosition()
     {
-        SetMyPossibleMove();
         for (int index = 0; index < CanMoveTableIndexNumber.Count; index++)
         {
             if (CanMoveTableIndexNumber[index] != -1)
@@ -123,10 +118,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
     {
         for (int index = 0; index < CanMoveTableIndexNumber.Count; index++)
         {
-            if (CanMoveTableIndexNumber[index] != -1)
-            {
-                ShowPossibleMovePos[index].SetActive(false);
-            }
+            ShowPossibleMovePos[index].SetActive(false);
         }
     }
 
@@ -137,13 +129,23 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
     public void CatchPieces(AnimalChessPieces enemyPiece)
     {
-        Destroy(enemyPiece.gameObject);
-        MovePieces(enemyPiece.nowMyTableIndex);
+        if(MovePieces(enemyPiece.nowMyTableIndex))
+        {
+            GameManager.instance.CatchPiecesData.AddUserCatch(GameManager.instance.MyPlayNumber, enemyPiece);
+        }
     }
 
-    private void SpawnPieces()
+    public void SpawnPieces(int tableIndexNumber)
     {
+        photonView.RPC("RemovePocketListIndex", RpcTarget.All);
+        photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
+        GameManager.instance.MyTurnOver();
+    }
 
+    [PunRPC]
+    public void RemovePocketListIndex()
+    {
+        GameManager.instance.CatchPiecesData.FindAndRemovePiece(this);
     }
 
     protected void SetMyPossibleMove()
@@ -155,5 +157,4 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
             CanMoveTableIndexNumber.Add(checkBox.checkFrameNumber);
         }
     }
-
 }

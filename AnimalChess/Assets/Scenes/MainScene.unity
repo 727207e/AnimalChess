@@ -308,7 +308,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1369022581, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 752463496854081927, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: m_RootOrder
@@ -358,9 +358,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainGame
       objectReference: {fileID: 0}
+    - target: {fileID: 5162323413923760558, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6599231602531883841, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
       propertyPath: sceneViewId
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbdde38a3dbd9644f9cbcb385fb1381a, type: 3}
