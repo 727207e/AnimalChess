@@ -5,7 +5,7 @@ using Photon.Pun;
 using UnityEditor;
 using System.Threading.Tasks;
 
-public abstract class AnimalChessPieces : MonoBehaviourPun
+public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagicCallback
 {
     public bool isCapturedObject = false;
     public bool isMyPieces;
@@ -19,27 +19,48 @@ public abstract class AnimalChessPieces : MonoBehaviourPun
     public Material player_1_Mat;
     public Material player_2_Mat;
 
-
-    public void InitChessPieces(int IndexNumber, string ObjectName, bool isMyPieces)
+    class SpawnObjectDataType
     {
-        photonView.RPC("PhotonThisPiecesSetting", RpcTarget.All, IndexNumber, ObjectName, isMyPieces);
+        public int _indexNumber;
+        public string _objectName;
+        public bool _isMypieces;
     }
 
-    [PunRPC]
-    public void PhotonThisPiecesSetting(int IndexNumber, string ObjectName, bool isMyPieces)
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
+        SpawnObjectDataType objectData = new SpawnObjectDataType();
+
+        object[] data = this.gameObject.GetPhotonView().InstantiationData;
+        if(data != null)
+        {
+            objectData._indexNumber = (int)data[0];
+            objectData._objectName = (string)data[1];
+            objectData._isMypieces = (bool)data[2];
+        }
+
+
+        isMyPieces = objectData._isMypieces;
         if (!PhotonNetwork.IsMasterClient)
         {
             isMyPieces = !isMyPieces;
         }
 
-        transform.name = ObjectName;
-        transform.SetParent(GameManager.instance.ChessTable.TableFrame[IndexNumber].transform);
+        if(PhotonNetwork.IsMasterClient)
+        {
+            float rotateValue = 0;
+            if (!isMyPieces)
+                rotateValue = 180.0f;
+            transform.localRotation = Quaternion.Euler(0, rotateValue, 0);
+        }
+
+
+        transform.name = objectData._objectName;
+        transform.SetParent(GameManager.instance.ChessTable.TableFrame[objectData._indexNumber].transform);
         transform.localScale = Vector3.one;
         transform.localPosition = Vector3.zero;
         transform.Translate(0, 0.1f, 0);
         transform.GetComponent<AnimalChessPieces>().isMyPieces = isMyPieces;
-        transform.GetComponent<AnimalChessPieces>().nowMyTableIndex = IndexNumber;
+        transform.GetComponent<AnimalChessPieces>().nowMyTableIndex = objectData._indexNumber;
 
         SetMyPossibleMove();
         DeactivePossibleMovePosition();
@@ -134,4 +155,5 @@ public abstract class AnimalChessPieces : MonoBehaviourPun
             CanMoveTableIndexNumber.Add(checkBox.checkFrameNumber);
         }
     }
+
 }
