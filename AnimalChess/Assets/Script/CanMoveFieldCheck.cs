@@ -9,6 +9,10 @@ public class CanMoveFieldCheck : MonoBehaviour
 
     public void CheckCanMovePosition()
     {
+        if(gameObject == null)
+        {
+            return;
+        }
         //해당 체크 위치에 있는가 확인
         Collider[] hitColliders 
             = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 40, Quaternion.identity);

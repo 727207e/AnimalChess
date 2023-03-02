@@ -248,6 +248,7 @@ MonoBehaviour:
   ShowPossibleMovePos:
   - {fileID: 5621184495584738612}
   GameObjectSelectedCheck: {fileID: 7437481489916546542}
+  JjolChessPieceUpPrefab: ChessPieces_JJol_Up
 --- !u!114 &3944010345488565586
 MonoBehaviour:
   m_ObjectHideFlags: 0

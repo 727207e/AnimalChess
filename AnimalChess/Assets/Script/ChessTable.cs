@@ -44,13 +44,11 @@ public class ChessTable : MonoBehaviourPun
         //내 진영 체크
         if (GameManager.instance.MyPlayNumber == 1)
         {
-            CheckMyGround(new int[] { 0, 1, 2, 3, 4, 5 });
             CheckEnemyBaseGround(new int[] { 9, 10, 11 });
         }
 
         else if (GameManager.instance.MyPlayNumber == 2)
         {
-            CheckMyGround(new int[] { 6, 7, 8, 9, 10, 11 });
             CheckEnemyBaseGround(new int[] { 0, 1, 2 });
         }
 
@@ -68,14 +66,6 @@ public class ChessTable : MonoBehaviourPun
             Quaternion.Euler(0, 0, 0), 0, data);
 
         return playerObject;
-    }
-
-    private void CheckMyGround(int[] myRandIndexs)
-    {
-        foreach (int index in myRandIndexs)
-        {
-            TableFrame[index].isMyFrame = true;
-        }
     }
 
     private void CheckEnemyBaseGround(int[] enemyBaseRandIndex)

@@ -57,6 +57,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         float rotateValue = 0;
         if (!isMyPieces)
             rotateValue = 180.0f;
+
         transform.localRotation = Quaternion.Euler(0, rotateValue, 0);
 
         transform.name = objectData._objectName;

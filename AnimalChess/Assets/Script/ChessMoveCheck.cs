@@ -145,8 +145,8 @@ public class ChessMoveCheck : MonoBehaviour
                 //포로인경우
                 if(preClickedObject.IsCapturedObject)
                 {
-                    //내 땅인 경우 생성
-                    if (GameManager.instance.ChessTable.TableFrame[tableIndexNumber].isMyFrame)
+                    //적 base가 아닌 경우
+                    if (!GameManager.instance.ChessTable.TableFrame[tableIndexNumber].isEnemyBaseFrame)
                     {
                         preClickedObject.SpawnPieces(tableIndexNumber);
                     }
