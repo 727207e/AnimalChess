@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class KingChessPieces : AnimalChessPieces
 {
+    public override bool IsCapturedObject 
+    {
+        get => base.IsCapturedObject;
+        set
+        {
+            //상대 킹 잡은경우 승리
+            if(value == true && photonView.IsMine)
+            {
+                GameManager.instance.actionIsWin?.Invoke();
+            }
+        }
+    }
+
     public override bool MovePieces(int tableIndexNumber)
     {
         return base.MovePieces(tableIndexNumber);
@@ -18,5 +31,4 @@ public class KingChessPieces : AnimalChessPieces
             GameManager.instance.actionIsMyTurn += GameManager.instance.actionIsWin;
         }
     }
-
 }

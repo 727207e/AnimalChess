@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviourPun
 
     public bool isGameStart = false;
 
+    public GameObject WinText;
+    public GameObject LoseText;
+
     private bool isMyTurn = false;
     public bool IsMyTurn
     {
@@ -63,6 +66,9 @@ public class GameManager : MonoBehaviourPun
         isGameStart = true;
         actionIsWin += GameWinShowUp;
         actionIsLose += GameLosdShowUp;
+
+        WinText.SetActive(false);
+        LoseText.SetActive(false);
     }
 
     public void MyTurnOver()
@@ -78,13 +84,27 @@ public class GameManager : MonoBehaviourPun
 
     public void GameWinShowUp()
     {
-        Debug.Log("Win");
+        GameWinSync();
+        photonView.RPC("GameLoseSync", RpcTarget.Others);   //타인은 패배
         isGameStart = false;
+    }
+
+    [PunRPC]
+    public void GameWinSync()
+    {
+        WinText.SetActive(true);
     }
 
     public void GameLosdShowUp()
     {
-        Debug.Log("losd");
+        GameLoseSync();
+        photonView.RPC("GameWinSync", RpcTarget.Others); //타인은 승리
         isGameStart = false;
+    }
+
+    [PunRPC]
+    public void GameLoseSync()
+    {
+        LoseText.SetActive(true);
     }
 }

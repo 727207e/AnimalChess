@@ -7,7 +7,19 @@ using System.Threading.Tasks;
 
 public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagicCallback
 {
-    public bool isCapturedObject = false;
+    private bool isCapturedObject = false;
+    public virtual bool IsCapturedObject
+    {
+        get
+        {
+            return isCapturedObject; 
+        }
+        set 
+        {
+            isCapturedObject = value; 
+        }
+    }
+
     public bool isMyPieces;
     public int nowMyTableIndex;
     public List<int> CanMoveTableIndexNumber = new List<int>();
@@ -76,7 +88,7 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
     public virtual bool MovePieces(int tableIndexNumber)
     {
         //포로 오브젝트가 아니면 이동 가능 확인하기
-        if (!isCapturedObject)
+        if (!IsCapturedObject)
         {
             //이동 가능 위치인가
             int findIndexInTable = CanMoveTableIndexNumber.FindIndex(x => x == tableIndexNumber);

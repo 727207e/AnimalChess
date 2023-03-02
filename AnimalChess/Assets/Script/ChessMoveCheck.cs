@@ -82,7 +82,7 @@ public class ChessMoveCheck : MonoBehaviour
     private void SelectedPieces(AnimalChessPieces clickedObj)
     {
         //내 말이고, 포로인 경우
-        if (clickedObj.isMyPieces && clickedObj.isCapturedObject)
+        if (clickedObj.isMyPieces && clickedObj.IsCapturedObject)
         {
             preClickedObject = clickedObj;
         }
@@ -111,7 +111,7 @@ public class ChessMoveCheck : MonoBehaviour
             else
             {
                 //포로는 제외
-                if(preClickedObject.isCapturedObject)
+                if(preClickedObject.IsCapturedObject)
                 {
                     return;
                 }
@@ -143,7 +143,7 @@ public class ChessMoveCheck : MonoBehaviour
             else
             {
                 //포로인경우
-                if(preClickedObject.isCapturedObject)
+                if(preClickedObject.IsCapturedObject)
                 {
                     //내 땅인 경우 생성
                     if (GameManager.instance.ChessTable.TableFrame[tableIndexNumber].isMyFrame)

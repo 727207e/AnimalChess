@@ -59,7 +59,7 @@ public class CatchPiecesData : MonoBehaviourPun
 
     private void MovePocketPosition(int ListNumber, AnimalChessPieces animalChessPieces)
     {
-        animalChessPieces.isCapturedObject = true;
+        animalChessPieces.IsCapturedObject = true;
         animalChessPieces.isMyPieces = (ListNumber == GameManager.instance.MyPlayNumber);
         animalChessPieces.nowMyTableIndex = -1;
         animalChessPieces.CanMoveTableIndexNumber.Clear();

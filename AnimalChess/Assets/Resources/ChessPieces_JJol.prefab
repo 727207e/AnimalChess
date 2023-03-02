@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 1265541570139933352}
   - component: {fileID: 1265541570139933351}
   - component: {fileID: 1265541570139933350}
-  - component: {fileID: 3267584864782420492}
+  - component: {fileID: 8007797650403068306}
   - component: {fileID: 3944010345488565586}
   m_Layer: 6
   m_Name: ChessPieces_JJol
@@ -228,7 +228,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &3267584864782420492
+--- !u!114 &8007797650403068306
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -237,10 +237,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1265541570139933349}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d709da1c7e54ca4e9a895d640a1ce50, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d5237e77d58b3d468a2ce537e9f5cb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCapturedObject: 0
   isMyPieces: 0
   nowMyTableIndex: 0
   CanMoveTableIndexNumber: 

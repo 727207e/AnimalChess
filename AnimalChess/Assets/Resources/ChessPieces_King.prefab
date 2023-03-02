@@ -501,7 +501,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d709da1c7e54ca4e9a895d640a1ce50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCapturedObject: 0
   isMyPieces: 0
   nowMyTableIndex: 0
   CanMoveTableIndexNumber: 
