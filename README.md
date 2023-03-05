@@ -16,9 +16,9 @@
 
 #### 플레이 영상
 
-촬영은 하나는 빌드된 exe 파일 , 하나는 Unity ParrelSync 로 제작된 프로젝트로 진행함.
+- 촬영은 하나는 빌드된 exe 파일 , 하나는 Unity ParrelSync 로 제작된 프로젝트로 진행함.
 
-- https://user-images.githubusercontent.com/54798151/222973248-5893a7ed-6dad-4033-a82c-5a7b33f9e852.mp4
+https://user-images.githubusercontent.com/54798151/222973248-5893a7ed-6dad-4033-a82c-5a7b33f9e852.mp4
 
 
 
