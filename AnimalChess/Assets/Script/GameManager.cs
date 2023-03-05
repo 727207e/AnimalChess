@@ -15,6 +15,11 @@ public class GameManager : MonoBehaviourPun
     public Material player_1_Mat;
     public Material player_2_Mat;
 
+    public bool isGameStart = false;
+
+    public GameObject WinText;
+    public GameObject LoseText;
+
     private bool isMyTurn = false;
     public bool IsMyTurn
     {
@@ -24,14 +29,17 @@ public class GameManager : MonoBehaviourPun
         }
         set
         {
-            isMyTurn = value;
-            if (isMyTurn)
+            if(isGameStart) //게임중일때만 턴이 넘어옴
             {
-                actionIsMyTurn?.Invoke();
-            }
-            else
-            {
-                actionIsEnemyTurn?.Invoke();
+                isMyTurn = value;
+                if (isMyTurn)
+                {
+                    actionIsMyTurn?.Invoke();
+                }
+                else
+                {
+                    actionIsEnemyTurn?.Invoke();
+                }
             }
         }
     }
@@ -54,6 +62,21 @@ public class GameManager : MonoBehaviourPun
         {
             MyPlayNumber = 2;
         }
+
+        isGameStart = true;
+        actionIsWin += GameWinShowUp;
+        actionIsLose += GameLosdShowUp;
+
+        WinText.SetActive(false);
+        LoseText.SetActive(false);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            IsMyTurn = true;
+        }
     }
 
     public void MyTurnOver()
@@ -65,5 +88,31 @@ public class GameManager : MonoBehaviourPun
     public void PhotonTurnOver()
     {
         IsMyTurn = !IsMyTurn;
+    }
+
+    public void GameWinShowUp()
+    {
+        GameWinSync();
+        photonView.RPC("GameLoseSync", RpcTarget.Others);   //타인은 패배
+        isGameStart = false;
+    }
+
+    [PunRPC]
+    public void GameWinSync()
+    {
+        WinText.SetActive(true);
+    }
+
+    public void GameLosdShowUp()
+    {
+        GameLoseSync();
+        photonView.RPC("GameWinSync", RpcTarget.Others); //타인은 승리
+        isGameStart = false;
+    }
+
+    [PunRPC]
+    public void GameLoseSync()
+    {
+        LoseText.SetActive(true);
     }
 }

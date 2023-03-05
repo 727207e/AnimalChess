@@ -7,9 +7,25 @@ using System.Threading.Tasks;
 
 public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagicCallback
 {
-    public bool isCapturedObject = false;
+    protected List<(int, int)> canMovePoint = new List<(int, int)>();
+    List<GameObject> canMovePointObjectList = new List<GameObject>();
+    private bool isCapturedObject = false;
+    public virtual bool IsCapturedObject
+    {
+        get
+        {
+            return isCapturedObject; 
+        }
+        set 
+        {
+            isCapturedObject = value; 
+        }
+    }
+
     public bool isMyPieces;
-    public int nowMyTableIndex;
+    public int[] nowMyTableIndex;
+    public int in1;
+    public int in2;
     public List<int> CanMoveTableIndexNumber = new List<int>();
     public List<CanMoveFieldCheck> CanMoveTableCheckBox = new List<CanMoveFieldCheck>();
 
@@ -18,21 +34,30 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
     class SpawnObjectDataType
     {
-        public int _indexNumber;
+        public int _indexNumberRow;
+        public int _indexNumberCol;
         public string _objectName;
         public bool _isMypieces;
     }
 
+    public void Update()
+    {
+        in1 = canMovePoint[0].Item1;
+        in2 = canMovePoint[0].Item2;
+    }
+
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
+        nowMyTableIndex = new int[2];
         SpawnObjectDataType objectData = new SpawnObjectDataType();
 
         object[] data = this.gameObject.GetPhotonView().InstantiationData;
         if(data != null)
         {
-            objectData._indexNumber = (int)data[0];
-            objectData._objectName = (string)data[1];
-            objectData._isMypieces = (bool)data[2];
+            objectData._indexNumberRow = (int)data[0];
+            objectData._indexNumberCol = (int)data[1];
+            objectData._objectName = (string)data[2];
+            objectData._isMypieces = (bool)data[3];
         }
 
 
@@ -45,18 +70,18 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         float rotateValue = 0;
         if (!isMyPieces)
             rotateValue = 180.0f;
+
         transform.localRotation = Quaternion.Euler(0, rotateValue, 0);
 
         transform.name = objectData._objectName;
-        transform.SetParent(GameManager.instance.ChessTable.TableFrame[objectData._indexNumber].transform);
+        transform.SetParent(GameManager.instance.ChessTable.
+            tableFrameNumber[objectData._indexNumberRow][objectData._indexNumberCol].Item1.transform);
         transform.localScale = Vector3.one;
         transform.localPosition = Vector3.zero;
         transform.Translate(0, 0.1f, 0);
-        transform.GetComponent<AnimalChessPieces>().isMyPieces = isMyPieces;
-        transform.GetComponent<AnimalChessPieces>().nowMyTableIndex = objectData._indexNumber;
-
-        SetMyPossibleMove();
-        GameManager.instance.actionIsMyTurn += SetMyPossibleMove;
+        nowMyTableIndex[0] = objectData._indexNumberRow;
+        nowMyTableIndex[1] = objectData._indexNumberCol;
+        GameManager.instance.ChessTable.AddChessPiecesDataInTable(nowMyTableIndex[0], nowMyTableIndex[1], this);
 
         DeactivePossibleMovePosition();
         GameObjectSelectedCheck.SetActive(false);
@@ -71,90 +96,141 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         }
 
         GameManager.instance.actionIsEnemyTurn += DeactivePossibleMovePosition;
+
+        InitData();
     }
 
-    public virtual bool MovePieces(int tableIndexNumber)
+    protected virtual void InitData()
     {
-        //포로 오브젝트가 아니면 이동 가능 확인하기
-        if (!isCapturedObject)
+        if(!PhotonNetwork.IsMasterClient)
         {
-            //이동 가능 위치인가
-            int findIndexInTable = CanMoveTableIndexNumber.FindIndex(x => x == tableIndexNumber);
+            ChangeCanMovePos();
+        }
+    }
 
-            if (findIndexInTable == -1)
+    protected virtual void ShowUpCanMovePoint()
+    {
+        List<List<(FrameInfo, AnimalChessPieces)>> tableClone = GameManager.instance.ChessTable.tableFrameNumber;
+
+        foreach (var point in canMovePoint)
+        {
+            int GoalRow = nowMyTableIndex[0] + point.Item1;
+            int GoalCol = nowMyTableIndex[1] + point.Item2;
+
+            //row 연산
+            if (GoalRow >= 0 && GoalRow < tableClone.Count)
             {
-                return false;
+                //col 연산
+                if(GoalCol >= 0 && GoalCol < tableClone[0].Count)
+                {
+                    //내 말이 거기 있으면 패스
+                    if(tableClone[GoalRow][GoalCol].Item2 != null)
+                    {
+                        if(tableClone[GoalRow][GoalCol].Item2.isMyPieces)
+                        {
+                            continue;
+                        }
+                    }
+
+                    GameObject gg = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    gg.transform.SetParent(tableClone[GoalRow][GoalCol].Item1.transform);
+                    gg.transform.localScale = Vector3.one * 5f;
+                    gg.transform.localPosition = Vector3.zero;
+                    gg.AddComponent<CanMoveFieldCheck>().GoalPoint = (GoalRow, GoalCol);
+                    gg.tag = "tile";
+                    gg.layer = LayerMask.NameToLayer("Clickable");
+
+                    canMovePointObjectList.Add(gg);
+                }
             }
         }
-        photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
+    }
+
+
+    public virtual bool MovePieces((int,int) tableIndexNumber)
+    {
+        photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber.Item1, tableIndexNumber.Item2);
         GameManager.instance.MyTurnOver();
 
         return true;
     }
 
     [PunRPC]
-    public void MovePiecesOnSync(int tableIndexNumber)
+    public void MovePiecesOnSync(int index1, int index2)
     {
+        GameManager.instance.ChessTable.RemoveChessPiecesDataInTable(nowMyTableIndex[0], nowMyTableIndex[1]);
+
         //해당 칸으로 이동
-        transform.SetParent(GameManager.instance.ChessTable.TableFrame[tableIndexNumber].transform);
+        transform.SetParent(GameManager.instance.ChessTable.tableFrameNumber[index1][index2].Item1.transform);
         transform.localPosition = Vector3.zero;
         transform.Translate(0, 0.1f, 0);
 
-        nowMyTableIndex = tableIndexNumber;
+        nowMyTableIndex[0] = index1;
+        nowMyTableIndex[1] = index2;
+
+        if (isMyPieces)
+        {
+            GameManager.instance.ChessTable.CatchChessPiecesDataInTable(nowMyTableIndex[0], nowMyTableIndex[1], this);
+        }
+
+        GameManager.instance.ChessTable.AddChessPiecesDataInTable(nowMyTableIndex[0], nowMyTableIndex[1], this);
+
+        EndMove();
     }
 
     public virtual void ShowPossibleMovePosition()
     {
-        for (int index = 0; index < CanMoveTableIndexNumber.Count; index++)
-        {
-            if (CanMoveTableIndexNumber[index] != -1)
-            {
-                ShowPossibleMovePos[index].SetActive(true);
-            }
-        }
+        ShowUpCanMovePoint();
     }
 
     public virtual void DeactivePossibleMovePosition()
     {
-        for (int index = 0; index < CanMoveTableIndexNumber.Count; index++)
+        foreach(var obj in canMovePointObjectList)
         {
-            ShowPossibleMovePos[index].SetActive(false);
+            Destroy(obj);
         }
     }
 
-    protected void EndMove()
+    protected virtual void EndMove()
+    {
+
+    }
+
+    public virtual void PieceCatch()
     {
 
     }
 
     public void CatchPieces(AnimalChessPieces enemyPiece)
     {
-        if(MovePieces(enemyPiece.nowMyTableIndex))
-        {
-            GameManager.instance.CatchPiecesData.AddUserCatch(GameManager.instance.MyPlayNumber, enemyPiece);
-        }
+        GameManager.instance.CatchPiecesData.AddUserCatch(GameManager.instance.MyPlayNumber, enemyPiece);
     }
 
-    public void SpawnPieces(int tableIndexNumber)
+    public void SpawnPieces(int indexRow, int indexCol)
     {
+        if(GameManager.instance.ChessTable.tableFrameNumber[indexRow][indexCol].Item2 != null)
+        {
+            return;
+        }
+
         photonView.RPC("RemovePocketListIndex", RpcTarget.All);
-        photonView.RPC("MovePiecesOnSync", RpcTarget.All, tableIndexNumber);
+        photonView.RPC("MovePiecesOnSync", RpcTarget.All, indexRow, indexCol);
         GameManager.instance.MyTurnOver();
     }
 
     [PunRPC]
     public void RemovePocketListIndex()
     {
+        IsCapturedObject = false;
         GameManager.instance.CatchPiecesData.FindAndRemovePiece(this);
     }
 
-    protected void SetMyPossibleMove()
+    public void ChangeCanMovePos()
     {
-        CanMoveTableIndexNumber.Clear();
-        foreach (var checkBox in CanMoveTableCheckBox)
+        for(int index = 0; index < canMovePoint.Count; index++)
         {
-            checkBox.CheckCanMovePosition();
-            CanMoveTableIndexNumber.Add(checkBox.checkFrameNumber);
+            (int, int) canMoveChangeValue = (canMovePoint[index].Item1 * -1, canMovePoint[index].Item2 * -1);
+            canMovePoint[index] = canMoveChangeValue;
         }
     }
 }
