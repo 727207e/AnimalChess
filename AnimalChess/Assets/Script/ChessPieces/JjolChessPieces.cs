@@ -8,21 +8,26 @@ public class JjolChessPieces : AnimalChessPieces
 {
     public string JjolChessPieceUpPrefab = "ChessPieces_JJol_Up";
 
+    protected override void InitData()
+    {
+        canMovePoint.Add((-1, 0));
+    }
+
     protected override void EndMove()
     {
-        if (GameManager.instance.ChessTable.TableFrame[nowMyTableIndex].isEnemyBaseFrame)
-        {
-            object[] data = new object[3];
-            data[0] = nowMyTableIndex;
-            data[1] = "Jjol_Up";
-            data[2] = !isMyPieces;
+        //if (GameManager.instance.ChessTable.TableFrame[nowMyTableIndex].isEnemyBaseFrame)
+        //{
+        //    object[] data = new object[3];
+        //    data[0] = nowMyTableIndex;
+        //    data[1] = "Jjol_Up";
+        //    data[2] = !isMyPieces;
 
-            GameObject playerObject = PhotonNetwork.Instantiate(JjolChessPieceUpPrefab,
-                GameManager.instance.ChessTable.TableFrame[nowMyTableIndex].transform.position,
-                Quaternion.Euler(0, 0, 0), 0, data);
+        //    GameObject playerObject = PhotonNetwork.Instantiate(JjolChessPieceUpPrefab,
+        //        GameManager.instance.ChessTable.TableFrame[nowMyTableIndex].transform.position,
+        //        Quaternion.Euler(0, 0, 0), 0, data);
 
-            photonView.RPC("ActionRemove", RpcTarget.All);
-        }
+        //    photonView.RPC("ActionRemove", RpcTarget.All);
+        //}
     }
 
     [PunRPC]

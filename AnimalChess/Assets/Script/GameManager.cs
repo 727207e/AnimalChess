@@ -71,6 +71,14 @@ public class GameManager : MonoBehaviourPun
         LoseText.SetActive(false);
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            IsMyTurn = true;
+        }
+    }
+
     public void MyTurnOver()
     {
         photonView.RPC("PhotonTurnOver", RpcTarget.All);

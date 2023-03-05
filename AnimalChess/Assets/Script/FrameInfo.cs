@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FrameInfo : MonoBehaviour
 {
-    public int tableIndexNumber;
+    //타일의 중앙에 위치하게 할것.
+
+    public (int,int) tableIndexNumber;
     public bool isEnemyBaseFrame;
 }

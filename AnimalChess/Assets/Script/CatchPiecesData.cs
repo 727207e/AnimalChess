@@ -61,7 +61,7 @@ public class CatchPiecesData : MonoBehaviourPun
     {
         animalChessPieces.IsCapturedObject = true;
         animalChessPieces.isMyPieces = (ListNumber == GameManager.instance.MyPlayNumber);
-        animalChessPieces.nowMyTableIndex = -1;
+        //animalChessPieces.nowMyTableIndex = -1;
         animalChessPieces.CanMoveTableIndexNumber.Clear();
         animalChessPieces.CanMoveTableCheckBox.Clear();
         animalChessPieces.transform.Rotate(0, 180, 0);

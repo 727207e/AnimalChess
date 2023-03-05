@@ -13,7 +13,7 @@ public class ChessMoveCheck : MonoBehaviour
         }
         set
         {
-            if(preClicked_Hide != null)
+            if (preClicked_Hide != null)
             {
                 preClicked_Hide.GameObjectSelectedCheck.SetActive(false);
             }
@@ -35,7 +35,7 @@ public class ChessMoveCheck : MonoBehaviour
 
     public void Update()
     {
-        if(!GameManager.instance.IsMyTurn || !GameManager.instance.isGameStart)
+        if (!GameManager.instance.IsMyTurn || !GameManager.instance.isGameStart)
         {
             return;
         }
@@ -53,7 +53,7 @@ public class ChessMoveCheck : MonoBehaviour
         }
         ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 #elif UNITY_EDITOR
-        if(!Input.GetMouseButtonDown(0))
+        if (!Input.GetMouseButtonDown(0))
         {
             return;
         }
@@ -64,17 +64,17 @@ public class ChessMoveCheck : MonoBehaviour
         int layerMask = 1 << LayerMask.NameToLayer("Clickable");
         if (Physics.Raycast(ray, out var _hit, 100000, layerMask))
         {
-            if(_hit.collider.tag == "pieces")
+            if (_hit.collider.tag == "pieces")
             {
                 SelectedPieces(_hit.collider.gameObject.GetComponent<AnimalChessPieces>());
             }
-            else if(_hit.collider.tag == "tile")
+            else if (_hit.collider.tag == "tile")
             {
-                SelectedTile(_hit.collider.gameObject.GetComponent<FrameInfo>().tableIndexNumber);
+                SelectedTile(_hit.collider.gameObject.GetComponent<CanMoveFieldCheck>().GoalPoint);
             }
-            else
+            else if (_hit.collider.tag == "FrameInfo")
             {
-                SelectedTile(-1);
+                SelectedFrame(_hit.collider.gameObject.GetComponent<FrameInfo>());
             }
         }
     }
@@ -107,28 +107,13 @@ public class ChessMoveCheck : MonoBehaviour
                 preClickedObject.DeactivePossibleMovePosition();
                 preClickedObject = null;
             }
-            //다른말 선택시 
-            else
-            {
-                //포로는 제외
-                if(preClickedObject.IsCapturedObject)
-                {
-                    return;
-                }
-
-                //적군을 선택한 경우
-                else if(clickedObj.isMyPieces == false)
-                {
-                    preClickedObject.CatchPieces(clickedObj);
-                }
-            }
         }
     }
 
-    private void SelectedTile (int tableIndexNumber)
+    private void SelectedTile((int, int) tableIndexNumber)
     {
         //선택된 말이 없다면
-        if(preClickedObject == null)
+        if (preClickedObject == null)
         {
             return;
         }
@@ -136,26 +121,64 @@ public class ChessMoveCheck : MonoBehaviour
         //선택된 말이 있다면
         else
         {
-            if(tableIndexNumber == -1)
+            //포로인경우
+            if (preClickedObject.IsCapturedObject)
             {
-                preClickedObject = null;
+                return;
             }
             else
             {
-                //포로인경우
-                if(preClickedObject.IsCapturedObject)
+                preClickedObject.MovePieces(tableIndexNumber);
+            }
+        }
+    }
+
+    private void SelectedFrame(FrameInfo frame)
+    {
+        //선택된 말이 없다면
+        if (preClickedObject == null)
+        {
+            return;
+        }
+
+        //선택된 말이 있다면
+        else
+        {
+            //포로인경우
+            if (preClickedObject.IsCapturedObject)
+            {
+                (int,int) indexs = SearchFrameIndex(frame);
+
+                if(indexs.Item1 == -1 && indexs.Item2 == -1)
                 {
-                    //적 base가 아닌 경우
-                    if (!GameManager.instance.ChessTable.TableFrame[tableIndexNumber].isEnemyBaseFrame)
-                    {
-                        preClickedObject.SpawnPieces(tableIndexNumber);
-                    }
+                    Debug.Log("못찾음");
+                    return;
                 }
-                else
+
+                //적 base가 아닌 경우
+                if (!GameManager.instance.ChessTable.tableFrameNumber[indexs.Item1][indexs.Item2].Item1.isEnemyBaseFrame)
                 {
-                    preClickedObject.MovePieces(tableIndexNumber);
+                    preClickedObject.SpawnPieces(indexs.Item1, indexs.Item2);
                 }
             }
         }
+    }
+
+    private (int,int) SearchFrameIndex(FrameInfo frame)
+    {
+        List<List<(FrameInfo, AnimalChessPieces)>> tableClone = GameManager.instance.ChessTable.tableFrameNumber;
+
+        for (int i = 0; i < tableClone.Count; i++)
+        {
+            for (int j = 0; j < tableClone[0].Count; j++)
+            {
+                if (frame == tableClone[i][j].Item1)
+                {
+                    return (i, j);
+                }
+            }
+        }
+
+        return (-1, -1);
     }
 }
