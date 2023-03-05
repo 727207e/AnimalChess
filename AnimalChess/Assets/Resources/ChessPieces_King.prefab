@@ -114,6 +114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isMyPieces: 0
   nowMyTableIndex: 
+  in1: 0
+  in2: 0
   CanMoveTableIndexNumber: 
   CanMoveTableCheckBox:
   - {fileID: 0}

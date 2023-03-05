@@ -52,7 +52,7 @@ public class ChessMoveCheck : MonoBehaviour
             return;
         }
         ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-#elif UNITY_EDITOR
+#else
         if (!Input.GetMouseButtonDown(0))
         {
             return;
@@ -84,7 +84,15 @@ public class ChessMoveCheck : MonoBehaviour
         //내 말이고, 포로인 경우
         if (clickedObj.isMyPieces && clickedObj.IsCapturedObject)
         {
-            preClickedObject = clickedObj;
+            if (clickedObj == preClickedObject)
+            {
+                preClickedObject.DeactivePossibleMovePosition();
+                preClickedObject = null;
+            }
+            else
+            {
+                preClickedObject = clickedObj;
+            }
         }
 
         //선택된 말이 없다면

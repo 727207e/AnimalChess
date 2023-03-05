@@ -15,7 +15,7 @@ public class CatchPiecesData : MonoBehaviourPun
     [SerializeField] GameObject User_1_Pocket;
     [SerializeField] GameObject User_2_Pocket;
 
-    float pieceOffset = 2.3f;
+    float pieceOffset = 2.8f;
 
     Material myColor;
     Material enemyColor;
@@ -64,7 +64,14 @@ public class CatchPiecesData : MonoBehaviourPun
         //animalChessPieces.nowMyTableIndex = -1;
         animalChessPieces.CanMoveTableIndexNumber.Clear();
         animalChessPieces.CanMoveTableCheckBox.Clear();
+        animalChessPieces.nowMyTableIndex[0] = -1;
+        animalChessPieces.nowMyTableIndex[1] = -1;
         animalChessPieces.transform.Rotate(0, 180, 0);
+
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            animalChessPieces.ChangeCanMovePos();
+        }
 
         ShowCatchPiece();
     }
@@ -75,7 +82,7 @@ public class CatchPiecesData : MonoBehaviourPun
         {
             User_1_CatchPiecesList[index].transform.SetParent(User_1_Pocket.transform);
             User_1_CatchPiecesList[index].transform.localPosition = Vector3.zero;
-            User_1_CatchPiecesList[index].transform.Translate(0, 0, -1 * pieceOffset * index);
+            User_1_CatchPiecesList[index].transform.Translate(0, 0, pieceOffset * index);
             User_1_CatchPiecesList[index].gameObject.GetComponent<MeshRenderer>().material = myColor;
         }
 

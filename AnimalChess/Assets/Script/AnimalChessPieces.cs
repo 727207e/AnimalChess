@@ -24,6 +24,8 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
     public bool isMyPieces;
     public int[] nowMyTableIndex;
+    public int in1;
+    public int in2;
     public List<int> CanMoveTableIndexNumber = new List<int>();
     public List<CanMoveFieldCheck> CanMoveTableCheckBox = new List<CanMoveFieldCheck>();
 
@@ -36,6 +38,12 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         public int _indexNumberCol;
         public string _objectName;
         public bool _isMypieces;
+    }
+
+    public void Update()
+    {
+        in1 = canMovePoint[0].Item1;
+        in2 = canMovePoint[0].Item2;
     }
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
@@ -75,9 +83,6 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         nowMyTableIndex[1] = objectData._indexNumberCol;
         GameManager.instance.ChessTable.AddChessPiecesDataInTable(nowMyTableIndex[0], nowMyTableIndex[1], this);
 
-        SetMyPossibleMove();
-        GameManager.instance.actionIsMyTurn += SetMyPossibleMove;
-
         DeactivePossibleMovePosition();
         GameObjectSelectedCheck.SetActive(false);
 
@@ -97,7 +102,10 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
 
     protected virtual void InitData()
     {
-
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            ChangeCanMovePos();
+        }
     }
 
     protected virtual void ShowUpCanMovePoint()
@@ -160,6 +168,11 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         nowMyTableIndex[0] = index1;
         nowMyTableIndex[1] = index2;
 
+        if (isMyPieces)
+        {
+            GameManager.instance.ChessTable.CatchChessPiecesDataInTable(nowMyTableIndex[0], nowMyTableIndex[1], this);
+        }
+
         GameManager.instance.ChessTable.AddChessPiecesDataInTable(nowMyTableIndex[0], nowMyTableIndex[1], this);
 
         EndMove();
@@ -179,6 +192,11 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
     }
 
     protected virtual void EndMove()
+    {
+
+    }
+
+    public virtual void PieceCatch()
     {
 
     }
@@ -207,13 +225,12 @@ public abstract class AnimalChessPieces : MonoBehaviourPun, IPunInstantiateMagic
         GameManager.instance.CatchPiecesData.FindAndRemovePiece(this);
     }
 
-    protected void SetMyPossibleMove()
+    public void ChangeCanMovePos()
     {
-        //CanMoveTableIndexNumber.Clear();
-        //foreach (var checkBox in CanMoveTableCheckBox)
-        //{
-        //    checkBox.CheckCanMovePosition();
-        //    CanMoveTableIndexNumber.Add(checkBox.checkFrameNumber);
-        //}
+        for(int index = 0; index < canMovePoint.Count; index++)
+        {
+            (int, int) canMoveChangeValue = (canMovePoint[index].Item1 * -1, canMovePoint[index].Item2 * -1);
+            canMovePoint[index] = canMoveChangeValue;
+        }
     }
 }
