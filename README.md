@@ -14,7 +14,27 @@
 - 상대방의 왕을 잡는다.
 - 내 왕이 상대방의 진영에서 1칸이상 버틴다.
 
+#### 플레이 영상
+
+촬영은 하나는 빌드된 exe 파일 , 하나는 Unity ParrelSync 로 제작된 프로젝트로 진행함.
+https://user-images.githubusercontent.com/54798151/222973248-5893a7ed-6dad-4033-a82c-5a7b33f9e852.mp4
+
+
+
+
+#### 남은 기능
+
+1. - [ ] 코드 정리
+2. - [ ] 이미지 추가 정리
+3. - [ ] 리펙토링
+
+
+## 구현된 기능 리스트
+
+
 ### 서버 통신
+![image](https://user-images.githubusercontent.com/54798151/222972963-65a26c6f-8095-4b1a-b083-a334eea1c084.png)
+
 1. - [x] 닉네임 지정
 2. - [x] 방 확인.
 3. - [x] 방 입장.
@@ -24,6 +44,8 @@
 
 
 ### 게임 관리
+![image](https://user-images.githubusercontent.com/54798151/222973045-93ffc94b-ce20-4348-bf2c-89a7ff4a26dd.png)
+
 1. - [x] 내 턴인가?
 2. - [x] 이겼는가?
 3. - [x] 각 유저 데이터
@@ -31,16 +53,20 @@
 
 
 ### 장기말
+![image](https://user-images.githubusercontent.com/54798151/222972985-df60bed0-786a-48db-82c9-c4704df65f2f.png)
+
 1. - [x] 이동
 2. - [x] 이동 가능 위치 보여주기
 3. - [x] 도착
 4. - [x] 잡음
 5. - [x] 소환
 
+![image](https://user-images.githubusercontent.com/54798151/222973026-dbfaed81-161c-45f7-9012-4e8aa6afef20.png)
+
 ### 쫄 : 장기말
 1. - [x] 이동 - 1칸 이동 (진화한 상태?)
-2. - [ ] 도착 - 끝에 오면 진화
-3. - [ ] 소환
+2. - [x] 도착 - 끝에 오면 진화
+3. - [x] 소환
 
 ### 왕 : 장기말
 1. - [x] 이동 - 모든방향
