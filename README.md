@@ -18,16 +18,16 @@
 
 촬영은 하나는 빌드된 exe 파일 , 하나는 Unity ParrelSync 로 제작된 프로젝트로 진행함.
 
-https://user-images.githubusercontent.com/54798151/222973248-5893a7ed-6dad-4033-a82c-5a7b33f9e852.mp4
+- https://user-images.githubusercontent.com/54798151/222973248-5893a7ed-6dad-4033-a82c-5a7b33f9e852.mp4
 
 
 
 
 #### 남은 기능
 
-1. - [ ] 코드 정리
-2. - [ ] 이미지 추가 정리
-3. - [ ] 리펙토링
+- 1. - [ ] 코드 정리
+- 2. - [ ] 이미지 추가 정리
+- 3. - [ ] 리펙토링
 
 
 ## 구현된 기능 리스트
